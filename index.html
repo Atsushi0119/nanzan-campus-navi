@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>南山大学 キャンパスナビ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1>南山大学 キャンパスナビ</h1>
+      <p>キャンパスマップで目的地まで案内</p>
+    </div>
+    <button id="adminLoginBtn" class="secondary">管理者ログイン</button>
+  </header>
+
+  <main class="layout">
+    <section class="map-panel">
+      <div class="map-heading">
+        <h2>キャンパスマップ</h2>
+        <span id="modeBadge" class="badge">通常モード</span>
+      </div>
+
+      <p class="hint">
+        通路設定中は、道の曲がり角・分岐点・出入口を順番にクリックしてください。
+      </p>
+
+      <div id="mapViewport" class="map-viewport">
+        <img id="campusMap" src="campusmap.png" alt="南山大学キャンパスマップ">
+        <svg id="mapSvg" viewBox="0 0 782 696" aria-label="通路設定マップ">
+          <g id="edgeLayer"></g>
+          <g id="routeLayer"></g>
+          <g id="nodeLayer"></g>
+          <g id="currentLocationLayer"></g>
+        </svg>
+      </div>
+
+      <div id="mapMessage" class="message" role="status">
+        地図を読み込んでいます。
+      </div>
+
+      <div class="map-legend">
+        <span><i class="legend-dot start"></i>出発地</span>
+        <span><i class="legend-dot goal"></i>目的地</span>
+        <span id="normalLegendItem" class="admin-only-legend hidden">
+          <i class="legend-dot normal"></i>登録地点（管理者用）
+        </span>
+        <span id="pathLegendItem" class="admin-only-legend hidden">
+          <i class="legend-line"></i>通路
+        </span>
+      </div>
+    </section>
+
+    <aside class="side-panel">
+      <section class="panel-section">
+        <h2>ルート検索</h2>
+
+        <label for="startSelect">出発地</label>
+        <select id="startSelect"></select>
+
+        <label for="goalSelect">目的地</label>
+        <select id="goalSelect"></select>
+
+        <button id="routeBtn" class="primary full-width">ルートを検索</button>
+        <button id="gpsRouteBtn" class="secondary full-width">現在地から目的地へ</button>
+
+        <div id="routeResult" class="route-result">
+          出発地と目的地を選択してください。
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <h2>現在地</h2>
+        <button id="gpsBtn" class="secondary full-width">現在地を取得</button>
+        <p id="gpsStatus" class="small-text">現在地は未取得です。</p>
+        <p id="gpsAccuracy" class="small-text"></p>
+      </section>
+
+      <section id="adminPanel" class="panel-section hidden">
+        <h2>地点・通路の設定</h2>
+
+        <p class="small-text">
+          地点を追加して名前を付け、通路設定で道を順番につなぎます。
+        </p>
+
+        <button id="pathModeBtn" class="primary full-width">通路を設定</button>
+
+        <div id="pathControls" class="hidden">
+          <div class="setting-status">
+            <strong>通路設定中</strong>
+            <p id="pathStatus">最初の地点をクリックしてください。</p>
+          </div>
+          <button id="undoPathBtn" class="secondary full-width">1つ戻る</button>
+          <button id="finishPathBtn" class="primary full-width">登録完了</button>
+          <button id="cancelPathBtn" class="danger full-width">キャンセル</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>地点の管理</h3>
+        <button id="addNodeBtn" class="secondary full-width">地図をクリックして地点を追加</button>
+        <button id="renameNodeBtn" class="secondary full-width">選択した地点の名前を変更</button>
+        <button id="deleteNodeBtn" class="danger full-width">選択した地点を削除</button>
+
+        <div class="divider"></div>
+
+        <h3>登録済み地点</h3>
+        <p id="nodeCount" class="small-text"></p>
+        <div id="nodeList" class="node-list"></div>
+
+        <div class="divider"></div>
+
+        <h3>データ管理</h3>
+        <button id="saveBtn" class="secondary full-width">保存する</button>
+        <button id="exportBtn" class="secondary full-width">JSONを書き出す</button>
+
+        <label for="importFile" class="file-label">JSONを読み込む</label>
+        <input id="importFile" type="file" accept=".json,application/json">
+
+        <p class="small-text">
+          設定データはこのブラウザに保存されます。別の端末でも使う場合はJSONを書き出してください。
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
